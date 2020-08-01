@@ -25,11 +25,11 @@ body{
 }
 
 #background-stats-1{
-  background-color: #2196f3;
+  background-color: #99CCFF;
 }
 
 #background-stats-2{
-  background-color: #00cbca;
+  background-color: #FF9933;
 }
 
 #content-container{
@@ -81,20 +81,20 @@ body{
   top: 50%;
   transform: translateY(-50%);
   text-align: left;
-  padding-left: 50px;
+  padding-left: 20px;
 }
 
 #choice .choice .label{
   text-transform: uppercase;
 }
 
-#choice .choice.dogs{
-  color: #00cbca;
+#choice .choice.ver{
+  color: #FF9933;
   float: right;
 }
 
-#choice .choice.cats{
-  color: #2196f3;
+#choice .choice.inv{
+  color: #99CCFF;
   float: left;
 }
 #background-stats{
