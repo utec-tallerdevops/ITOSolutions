@@ -110,7 +110,6 @@ pipeline {
                 sh 'docker stop $(docker ps -a -q)'
                 echo 'Ejecutando comando docker rm $(docker ps -a -q)'
                 sh 'docker rm $(docker ps -a -q)'
-                sh 'docker-compose down'
            }
         }
 
