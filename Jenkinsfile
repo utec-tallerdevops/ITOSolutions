@@ -58,6 +58,39 @@ pipeline {
                 sh 'docker ps'
                 echo 'Ejecutando comando docker ps -a...'
                 sh 'docker ps -a'
+                echo 'Ejecutando comando docker images...'
+                sh 'docker images'
+           }
+        }
+
+
+         stage('Parar y Remover Contenedores') {
+         agent {
+                node {
+                    label 'master'
+                }
+            }
+            steps {
+                echo 'Ejecutando comando docker stop $(docker ps -a -q)...'
+                sh 'docker stop $(docker ps -a -q)'
+                echo 'Ejecutando comando docker rm $(docker ps -a -q)'
+                sh 'docker rm $(docker ps -a -q)'
+           }
+        }
+
+        stage('Verificacion Final') {
+         agent {
+                node {
+                    label 'master'
+                }
+            }
+            steps {
+                echo 'Ejecutando comando docker ps...'
+                sh 'docker ps'
+                echo 'Ejecutando comando docker ps -a...'
+                sh 'docker ps -a'
+                echo 'Ejecutando comando docker images...'
+                sh 'docker images'
            }
         }
 /*
