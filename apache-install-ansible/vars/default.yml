@@ -1,0 +1,6 @@
+---
+    app_user: "itosolutions"
+    http_host: "itosolutionsdomain"
+    http_conf: "itosolutionsdomain.conf"
+    http_port: "80"
+    disable_default: true

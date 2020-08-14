@@ -1,0 +1,66 @@
+---
+    - hosts: all
+      remote_user: utecagent
+      become: yes
+
+      handlers:
+      - name: Reiniciar apache
+        service: "name=httpd state=restarted"
+      - name: Recargar apache
+        service: "name=httpd state=reloaded"
+
+      tasks:
+        - name: Verificar que no hay versiones de apache instaladas
+          package:
+            name:
+              - httpd
+              - apache2
+            state: absent
+
+        - name: Instalar pre-requisitos.
+          apt:
+           name:
+                - apache2
+           update_cache: yes
+           state: latest 
+           force_apt_get: yes
+           loop: [ 'aptitude' ]  
+        
+        - name: Instalar Apache
+          apt:
+            name:
+              - apache2
+            update_cache: yes 
+            state: present
+
+        - name: Creamos la carpeta root de apache
+      file:
+        path: "/var/www/{{ http_host }}"
+        state: directory
+        owner: "{{ app_user }}"
+        mode: '0755'
+
+    - name: Copiamos la index test page
+      template:
+        src: "files/index.html.j2"
+        dest: "/var/www/{{ http_host }}/index.html"
+
+    - name: Creamos el virtualhost de apache
+      template:
+        src: "files/apache.conf.j2"
+        dest: "/etc/apache2/sites-available/{{ http_conf }}"
+
+    - name: Deploy para la nueva pagina
+      shell: /usr/sbin/a2ensite {{ http_conf }}
+      notify: Reiniciar apache
+
+    - name: Desabilitamos la pagina principal de apache
+      shell: /usr/sbin/a2dissite 000-default.conf
+      when: disable_default
+      notify: Reiniciar apache
+
+    - name: "UFW - Allow HTTP on port {{ http_port }}"
+      ufw:
+        rule: allow
+        port: "{{ http_port }}"
+        proto: tcp
