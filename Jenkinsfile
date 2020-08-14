@@ -24,6 +24,14 @@ pipeline {
                 echo 'Probando cosas...'
             }
         }
+      stage('Pruebas Docker PS') {
+            steps {
+                echo 'Probando comando docker ps...'
+                sh 'docker ps'
+                echo 'Probando comando docker ps -a...'
+                sh 'docker ps'
+           }
+        }
 /*
         stage('Despliegue en agente UTEC'){
             agent {
