@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-      stage('Verificacion') {
+           stage('Verificacion') {
          agent {
                 node {
                     label 'master'
@@ -29,6 +29,8 @@ pipeline {
                 sh 'docker ps'
                 echo 'Ejecutando comando docker ps -a...'
                 sh 'docker ps -a'
+                echo 'Ejecutando comando ls...'
+                sh 'ls'
            }
         }
 /*
