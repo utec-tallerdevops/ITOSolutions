@@ -1,4 +1,3 @@
-
 pipeline {
   
     agent none
@@ -19,24 +18,17 @@ pipeline {
             }
         }
 
-        stage('Pruebas') {
-            steps {
-                echo 'Probando cosas...'
-            }
-        }
-      stage('Pruebas Docker PS') {
+      stage('Verificacion') {
          agent {
                 node {
                     label 'master'
-
-
                 }
             }
             steps {
-                echo 'Probando comando docker ps...'
+                echo 'Ejecutando comando docker ps...'
                 sh 'docker ps'
-                echo 'Probando comando docker ps -a...'
-                sh 'docker ps'
+                echo 'Ejecutando comando docker ps -a...'
+                sh 'docker ps -a'
            }
         }
 /*
@@ -46,7 +38,6 @@ pipeline {
                     label 'utec'
                 }
             }
-
             steps{
                  echo 'Desplegando en agente UTEC...'
                  sh 'uname -a'
@@ -57,4 +48,3 @@ pipeline {
     }
 
 }
-
