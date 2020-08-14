@@ -25,6 +25,13 @@ pipeline {
             }
         }
       stage('Pruebas Docker PS') {
+         agent {
+                node {
+                    label 'master'
+
+
+                }
+            }
             steps {
                 echo 'Probando comando docker ps...'
                 sh 'docker ps'
