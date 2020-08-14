@@ -98,22 +98,6 @@ pipeline {
            }
         }
 
-
-         stage('Parar y Remover Contenedores') {
-         agent {
-                node {
-                    label 'utec'
-                }
-            }
-            steps {
-                echo 'Ejecutando comando docker stop $(docker ps -a -q)...'
-                sh 'docker stop $(docker ps -a -q)'
-                echo 'Ejecutando comando docker rm $(docker ps -a -q)'
-                sh 'docker rm $(docker ps -a -q)'
-                sh 'docker-compose down'
-           }
-        }
-
         stage('Verificacion Final') {
          agent {
                 node {
