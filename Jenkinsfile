@@ -7,30 +7,39 @@ pipeline {
         stage('Construccion') {
             agent {
                 node {
-                    label 'master'
+                    label 'utec'
 
 
                 }
             }
             steps {
-                    echo 'Construyendo en master...'
+                    echo 'Construyendo en agente UTEC...'
                     sh 'uname -a'
             }
+        }
+
+        
+      stage('Login') {
+         agent {
+                node {
+                    label 'utec'
+                }
+            }
+            steps {
+                echo 'Ejecutando comando docker login devopsutec.azurecr.io -u devopsutec -p eYUZB+kRWGt19mj8Lj1RpbmSKnwdtw33...'
+                sh 'docker login -u devopsutec -p eYUZB+kRWGt19mj8Lj1RpbmSKnwdtw33'
+           }
         }
 
       stage('Verificacion') {
          agent {
                 node {
-                    label 'master'
+                    label 'utec'
                 }
             }
             steps {
                 echo 'Ejecutando comando docker ps...'
                 sh 'docker ps'
-                echo 'Ejecutando comando docker ps -a...'
-                sh 'docker ps -a'
-                echo 'Ejecutando comando ls...'
-                sh 'ls'
            }
         }
 
@@ -38,7 +47,7 @@ pipeline {
         stage('Docker Compose') {
          agent {
                 node {
-                    label 'master'
+                    label 'utec'
                 }
             }
             steps {
@@ -50,14 +59,40 @@ pipeline {
          stage('Verificacion Post Compose') {
          agent {
                 node {
-                    label 'master'
+                    label 'utec'
                 }
             }
             steps {
                 echo 'Ejecutando comando docker ps...'
                 sh 'docker ps'
-                echo 'Ejecutando comando docker ps -a...'
-                sh 'docker ps -a'
+                echo 'Ejecutando comando docker images...'
+                sh 'docker images'
+           }
+        }
+
+
+         stage('Docker Compose Down') {
+         agent {
+                node {
+                    label 'utec'
+                }
+            }
+            steps {
+                echo 'Ejecutando comando docker-compose down...'
+                sh 'docker-compose down'
+           }
+        }
+
+
+         stage('Verificacion Post Compose Down') {
+         agent {
+                node {
+                    label 'utec'
+                }
+            }
+            steps {
+                echo 'Ejecutando comando docker ps...'
+                sh 'docker ps'
                 echo 'Ejecutando comando docker images...'
                 sh 'docker images'
            }
@@ -67,7 +102,7 @@ pipeline {
          stage('Parar y Remover Contenedores') {
          agent {
                 node {
-                    label 'master'
+                    label 'utec'
                 }
             }
             steps {
@@ -75,37 +110,23 @@ pipeline {
                 sh 'docker stop $(docker ps -a -q)'
                 echo 'Ejecutando comando docker rm $(docker ps -a -q)'
                 sh 'docker rm $(docker ps -a -q)'
+                sh 'docker-compose down'
            }
         }
 
         stage('Verificacion Final') {
          agent {
                 node {
-                    label 'master'
+                    label 'utec'
                 }
             }
             steps {
                 echo 'Ejecutando comando docker ps...'
                 sh 'docker ps'
-                echo 'Ejecutando comando docker ps -a...'
-                sh 'docker ps -a'
                 echo 'Ejecutando comando docker images...'
                 sh 'docker images'
            }
         }
-/*
-        stage('Despliegue en agente UTEC'){
-            agent {
-                node {
-                    label 'utec'
-                }
-            }
-            steps{
-                 echo 'Desplegando en agente UTEC...'
-                 sh 'uname -a'
-            }
-        }
-*/
     
     }
 
