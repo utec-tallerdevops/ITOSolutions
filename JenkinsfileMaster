@@ -27,7 +27,7 @@ pipeline {
             }
             steps {
                 echo 'Ejecutando comando docker login devopsutec.azurecr.io -u devopsutec -p eYUZB+kRWGt19mj8Lj1RpbmSKnwdtw33...'
-                sh 'docker login -u devopsutec -p eYUZB+kRWGt19mj8Lj1RpbmSKnwdtw33'
+                sh 'docker login devopsutec.azurecr.io -u devopsutec -p eYUZB+kRWGt19mj8Lj1RpbmSKnwdtw33'
            }
         }
 
