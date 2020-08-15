@@ -27,7 +27,7 @@ pipeline {
             steps {
                     echo 'Construcción/Compilación de Imagenes en Master...'
        
-           
+                     sh 'ls'
                      sh 'docker build devopsutec.azurecr.io/itosolutions-worker-1.0'
                  
    
