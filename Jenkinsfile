@@ -25,7 +25,8 @@ pipeline {
                 }
             }
             steps {
-                    echo 'Construcción/Compilación de Imagenes en Master...
+                    echo 'Construcción/Compilación de Imagenes en Master...'
+              
                   dir('worker'){ 
                     sh 'docker build -t devopsutec.azurecr.io/itosolutions-worker-1.0:${BUILD_NUMBER} .'
                   }
