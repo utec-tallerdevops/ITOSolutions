@@ -56,6 +56,7 @@ pipeline {
                         sh 'docker push devopsutec.azurecr.io/itosolutions-vote-1.0:${BUILD_NUMBER}'
                         sh 'docker push devopsutec.azurecr.io/itosolutions-result-1.0:${BUILD_NUMBER}'
                     }
+                    
             }
         }
 
@@ -81,24 +82,16 @@ pipeline {
             withDockerRegistry(credentialsId: 'ITOSolutions', url:'https://devopsutec.azurecr.io'){ 
                 echo 'Ejecutando deploy con docker-compose up -d...'
                 sh 'docker-compose up -d'
-                }
-           }
-        }
-
-        stage('Verificacion Post docker-compose') {
-         agent {
-                node {
-                    label 'utec'
-                }
-            }
-            steps {
+                echo 'Verificacion Post docker-compose...'
                 echo 'Ejecutando comando docker ps...'
                 sh 'docker ps'
                 echo 'Ejecutando comando docker images...'
                 sh 'docker images'
+                }
            }
         }
 
+       /*
          stage('Docker Compose Down') {
          agent {
                 node {
@@ -127,6 +120,18 @@ pipeline {
 
 
 
+       stage('Logout') {
+         agent {
+                node {
+                    label 'utec'
+                }
+            }
+            steps {
+                echo 'Ejecutando comando docker logout...'
+                sh 'docker logout'
+           }
+        }
+        */
     }
 
         }
