@@ -11,6 +11,7 @@ pipeline {
                 }
             }
             steps {
+              
                 echo 'Ejecutando comando docker login devopsutec.azurecr.io -u devopsutec -p eYUZB+kRWGt19mj8Lj1RpbmSKnwdtw33...'
                 sh 'docker login devopsutec.azurecr.io -u devopsutec -p eYUZB+kRWGt19mj8Lj1RpbmSKnwdtw33'
            }
@@ -24,11 +25,14 @@ pipeline {
                 }
             }
             steps {
+               echo 'Push de Imagenes en Master...'
+                    withDockerRegistry(credentialsId: 'ITOSolutions', url:'https://devopsutec.azurecr.io'){ 
                     echo 'Push de Imagenes en Master...'
                     withDockerRegistry(credentialsId: 'ITOSolutions', url:'https://devopsutec.azurecr.io'){ 
                         sh 'docker push devopsutec.azurecr.io/itosolutions-worker-1.0:${BUILD_NUMBER}'
                         sh 'docker push devopsutec.azurecr.io/itosolutions-vote-1.0:${BUILD_NUMBER}'
                         sh 'docker push devopsutec.azurecr.io/itosolutions-result-1.0:${BUILD_NUMBER}'
+                    }
                     }
             }
         }
