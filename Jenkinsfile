@@ -59,7 +59,7 @@ pipeline {
                     
             }
         }
-
+/*
          stage('Verificacion') {
          agent {
                 node {
@@ -71,6 +71,7 @@ pipeline {
                 sh 'docker ps'
            }
         }
+    */
 
          stage('Deploy con docker-compose') {
          agent {
@@ -80,6 +81,9 @@ pipeline {
             }
             steps {
             withDockerRegistry(credentialsId: 'ITOSolutions', url:'https://devopsutec.azurecr.io'){ 
+                echo 'Verificacion Pre docker-compose...'
+                echo 'Ejecutando comando docker ps...'
+                sh 'docker ps'
                 echo 'Ejecutando deploy con docker-compose up -d...'
                 sh 'docker-compose up -d'
                 echo 'Verificacion Post docker-compose...'
@@ -103,7 +107,6 @@ pipeline {
                 sh 'docker-compose down'
            }
         }
-
         stage('Verificacion Final') {
          agent {
                 node {
@@ -117,9 +120,6 @@ pipeline {
                 sh 'docker images'
            }
         }
-
-
-
        stage('Logout') {
          agent {
                 node {
