@@ -28,10 +28,10 @@ pipeline {
                     echo 'Construcción/Compilación de Imagenes en Master...'
        
                       sh 'ls'
-                      sh 'cd worker/'
-                      sh 'ls'
+                  dir('worker'){ 
+                    sh 'ls'
                      sh 'docker build devopsutec.azurecr.io/itosolutions-worker-1.0'
-                 
+                  }
    
        
                      sh 'docker build devopsutec.azurecr.io/itosolutions-vote-1.0'
