@@ -4,34 +4,47 @@ pipeline {
 
     stages {
         
-        stage('Construccion') {
+        stage('Construcción/Compilación de Imagenes en Master') {
             agent {
                 node {
-                    label 'utec'
+                    label 'master'
 
 
                 }
             }
             steps {
-                    echo 'Construyendo en agente UTEC...'
-                    sh 'uname -a'
+                    echo 'Construcción/Compilación de Imagenes en Master...'
+                   dir('worker'){ 
+                     sh 'docker build -t devopsutec.azurecr.io/itosolutions-worker-1.0'
+                        }
+                    dir('vote'){
+                     sh 'docker build -t devopsutec.azurecr.io/itosolutions-vote-1.0'
+                        }
+                    dir('result'){
+                     sh 'docker build -t devopsutec.azurecr.io/itosolutions-result-1.0' 
+                        }
             }
         }
 
-        
-      stage('Login') {
-         agent {
+        stage('Push de Imagenes en Master') {
+            agent {
                 node {
-                    label 'utec'
+                    label 'master'
+
+
                 }
             }
             steps {
-                echo 'Ejecutando comando docker login devopsutec.azurecr.io -u devopsutec -p eYUZB+kRWGt19mj8Lj1RpbmSKnwdtw33...'
-                sh 'docker login devopsutec.azurecr.io -u devopsutec -p eYUZB+kRWGt19mj8Lj1RpbmSKnwdtw33'
-           }
+                    echo 'Push de Imagenes en Master...'
+                    withDockerRegistry(credentialsId: 'ITOSolutions', url:'https://devopsutec.azurecr.io'){ 
+                        sh 'docker push devopsutec.azurecr.io/itosolutions-worker-1.0'
+                        sh 'docker push devopsutec.azurecr.io/itosolutions-vote-1.0'
+                        sh 'docker push devopsutec.azurecr.io/itosolutions-result-1.0'
+                    }
+            }
         }
 
-      stage('Verificacion') {
+        stage('Verificacion') {
          agent {
                 node {
                     label 'utec'
@@ -43,8 +56,7 @@ pipeline {
            }
         }
 
-
-        stage('Docker Compose') {
+         stage('Deploy con docker-compose') {
          agent {
                 node {
                     label 'utec'
@@ -52,13 +64,13 @@ pipeline {
             }
             steps {
             withDockerRegistry(credentialsId: 'ITOSolutions', url:'https://devopsutec.azurecr.io'){ 
-                echo 'Ejecutando docker-compose up -d...'
+                echo 'Ejecutando deploy con docker-compose up -d...'
                 sh 'docker-compose up -d'
                 }
            }
         }
 
-         stage('Verificacion Post Compose') {
+        stage('Verificacion Post docker-compose') {
          agent {
                 node {
                     label 'utec'
@@ -72,8 +84,7 @@ pipeline {
            }
         }
 
-
-         stage('Docker Compose Down') {
+        stage('Docker Compose Down') {
          agent {
                 node {
                     label 'utec'
@@ -82,21 +93,6 @@ pipeline {
             steps {
                 echo 'Ejecutando comando docker-compose down...'
                 sh 'docker-compose down'
-           }
-        }
-
-
-         stage('Verificacion Post Compose Down') {
-         agent {
-                node {
-                    label 'utec'
-                }
-            }
-            steps {
-                echo 'Ejecutando comando docker ps...'
-                sh 'docker ps'
-                echo 'Ejecutando comando docker images...'
-                sh 'docker images'
            }
         }
 
@@ -113,7 +109,7 @@ pipeline {
                 sh 'docker images'
            }
         }
-    
-    }
 
 }
+
+        }
