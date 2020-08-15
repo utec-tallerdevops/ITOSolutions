@@ -16,23 +16,7 @@ pipeline {
            }
         }
       
-        stage('Construcción/Compilación de Imagenes en Master') {
-            agent {
-                node {
-                    label 'master'
-                }
-            }
-            steps {
-                    echo 'Construcción/Compilación de Imagenes en Master...'
-                   dir('worker'){ 
-                     sh 'docker pull devopsutec.azurecr.io/itosolutions-worker-1.0'
-                     sh 'docker build devopsutec.azurecr.io/itosolutions-worker-1.0'
-                     
-                        }
-                 
-            }
-        }
-
+    
         stage('Push de Imagenes en Master') {
             agent {
                 node {
