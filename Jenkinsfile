@@ -59,6 +59,73 @@ pipeline {
             }
         }
 
+         stage('Verificacion') {
+         agent {
+                node {
+                    label 'utec'
+                }
+            }
+            steps {
+                echo 'Ejecutando comando docker ps...'
+                sh 'docker ps'
+           }
+        }
+
+         stage('Deploy con docker-compose') {
+         agent {
+                node {
+                    label 'utec'
+                }
+            }
+            steps {
+            withDockerRegistry(credentialsId: 'ITOSolutions', url:'https://devopsutec.azurecr.io'){ 
+                echo 'Ejecutando deploy con docker-compose up -d...'
+                sh 'docker-compose up -d'
+                }
+           }
+        }
+
+        stage('Verificacion Post docker-compose') {
+         agent {
+                node {
+                    label 'utec'
+                }
+            }
+            steps {
+                echo 'Ejecutando comando docker ps...'
+                sh 'docker ps'
+                echo 'Ejecutando comando docker images...'
+                sh 'docker images'
+           }
+        }
+
+         stage('Docker Compose Down') {
+         agent {
+                node {
+                    label 'utec'
+                }
+            }
+            steps {
+                echo 'Ejecutando comando docker-compose down...'
+                sh 'docker-compose down'
+           }
+        }
+
+        stage('Verificacion Final') {
+         agent {
+                node {
+                    label 'utec'
+                }
+            }
+            steps {
+                echo 'Ejecutando comando docker ps...'
+                sh 'docker ps'
+                echo 'Ejecutando comando docker images...'
+                sh 'docker images'
+           }
+        }
+
+
 
     }
 
