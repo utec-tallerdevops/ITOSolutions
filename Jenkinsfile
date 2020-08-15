@@ -51,8 +51,10 @@ pipeline {
                 }
             }
             steps {
+            withDockerRegistry(credentialsId: 'devopsutec', url:'https://devopsutec.azurecr.io'){ 
                 echo 'Ejecutando docker-compose up -d...'
                 sh 'docker-compose up -d'
+                }
            }
         }
 
