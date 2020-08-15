@@ -3,6 +3,18 @@ pipeline {
     agent none
 
     stages {
+      
+        stage('Login') {
+         agent {
+                node {
+                    label 'master'
+                }
+            }
+            steps {
+                echo 'Ejecutando comando docker login devopsutec.azurecr.io -u devopsutec -p eYUZB+kRWGt19mj8Lj1RpbmSKnwdtw33...'
+                sh 'docker login devopsutec.azurecr.io -u devopsutec -p eYUZB+kRWGt19mj8Lj1RpbmSKnwdtw33'
+           }
+        }
         
         stage('Construcción/Compilación de Imagenes en Master') {
             agent {
